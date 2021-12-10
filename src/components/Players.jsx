@@ -2,6 +2,7 @@ import * as React from 'react'
 import { useLocation, useSearchParams, Outlet } from 'react-router-dom'
 import usePlayerNames from '../hooks/usePlayerNames'
 import Sidebar from './Sidebar'
+import Loading from './Loading'
 
 export default function Players () {
   const location = useLocation()
@@ -25,7 +26,7 @@ export default function Players () {
   } = usePlayerNames(team)
 
   if (loading === true) {
-    return null
+    return <Loading />
   }
 
   return (

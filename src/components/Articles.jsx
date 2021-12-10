@@ -1,6 +1,7 @@
 import { useParams, Outlet } from 'react-router-dom'
 import useTeamsArticles from '../hooks/useTeamsArticles'
 import Sidebar from './Sidebar'
+import Loading from './Loading'
 
 export default function Articles () {
   const { teamId } = useParams()
@@ -11,7 +12,7 @@ export default function Articles () {
   } = useTeamsArticles(teamId)
 
   if (loading === true) {
-    return <p>LOADING</p>
+    return <Loading />
   }
 
   return (
