@@ -1,8 +1,7 @@
 import * as React from 'react'
 import {
   BrowserRouter as Router,
-  Route,
-  Routes
+  useRoutes
 } from 'react-router-dom'
 import Navbar from './Navbar'
 import Loading from './Loading'
@@ -15,6 +14,39 @@ const Team = React.lazy(() => import('./Team'))
 const Articles = React.lazy(() => import('./Articles'))
 const Article = React.lazy(() => import('./Article'))
 
+function Routes () {
+  return useRoutes([
+    { path: '/', element: <Home /> },
+    {
+      path: '/players',
+      element: <Players />,
+      children: [
+        { path: ':playerId', element: <Player /> },
+        { path: '', element: <div className='sidebar-instruction'>Select a player</div> }
+      ]
+    },
+    {
+      path: '/teams',
+      element: <Teams />,
+      children: [
+        { path: ':teamId', element: <Team /> },
+        { path: '', element: <div className='sidebar-instruction'>Select a Team</div> }
+      ]
+    },
+    {
+      path: '/:teamId', element: <TeamPage />
+    },
+    {
+      path: '/:teamId/articles',
+      element: <Articles />,
+      children: [
+        { path: ':articleId', element: <Article /> },
+        { path: '', element: <div className='sidebar-instruction'>Select an article</div> }
+      ]
+    }
+  ])
+}
+
 export default function App () {
   return (
     <Router>
@@ -22,43 +54,7 @@ export default function App () {
         <Navbar />
 
         <React.Suspense fallback={<Loading />}>
-          <Routes>
-            <Route path='/' element={<Home />} />
-            <Route path='/players' element={<Players />}>
-              <Route path=':playerId' element={<Player />} />
-              <Route 
-                path=''
-                element={
-                  <div className='sidebar-instruction'>
-                    Select a player
-                  </div>
-                }
-              />
-            </Route>
-            <Route path='/teams' element={<Teams />}>
-              <Route path=':teamId' element={<Team />} />
-              <Route 
-                path=''
-                element={
-                  <div className='sidebar-instruction'>
-                    Select a Team
-                  </div>
-                }
-              />
-            </Route>
-            <Route path='/:teamId' element={<TeamPage />} />
-            <Route path='/:teamId/articles' element={<Articles />}>
-              <Route path=':articleId' element={<Article />} />
-              <Route 
-                path=''
-                element={
-                  <div className='sidebar-instruction'>
-                    Select an article
-                  </div>
-                }
-              />
-            </Route>
-          </Routes>
+          <Routes />
         </React.Suspense>
       </div>
     </Router>
